@@ -12,8 +12,8 @@ if [ -e compile.log ]; then
 	rm compile.log
 fi
 
-if [ -e ramdisk.cpio.gz ]; then
-	rm ramdisk.cpio.gz
+if [ -e ramdisk.cpio.lzma ]; then
+	rm ramdisk.cpio.lzma
 fi
 
 # Set Default Path

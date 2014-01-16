@@ -1,7 +1,7 @@
 #!/bin/bash
 
 displayversion=SKT_Googy-Max2-2.1.3
-version=$displayversion-$TARGET-$MODE-$(date +%Y%m%d)
+version=$displayversion-$(date +%Y%m%d)
 
 if [ -e boot.img ]; then
 	rm boot.img
@@ -15,8 +15,8 @@ if [ -e compile.log ]; then
 	rm compile.log
 fi
 
-if [ -e ramdisk.cpio.gz ]; then
-	rm ramdisk.cpio.gz
+if [ -e ramdisk.cpio.lzma ]; then
+	rm ramdisk.cpio.lzma
 fi
 
 # Set Default Path
@@ -25,7 +25,7 @@ KERNEL_PATH=$PWD
 # Set toolchain and root filesystem path
 TOOLCHAIN_PATH="/opt/android-toolchain-eabi-4.8-1312/bin"
 TOOLCHAIN="$TOOLCHAIN_PATH/arm-linux-androideabi-"
-ROOTFS_PATH="$KERNEL_PATH/ramdisks-skt/$TARGET-combo"
+ROOTFS_PATH="$KERNEL_PATH/ramdisks-skt"
 MODULES="$KERNEL_PATH/ramdisks-skt/modules"
 
 defconfig=0googymax2_defconfig
@@ -160,10 +160,10 @@ cd $ROOTFS_PATH
 find . | cpio -o -H newc > $KERNEL_PATH/ramdisk.cpio
 cd $KERNEL_PATH
 ls -lh ramdisk.cpio
-gzip -9 ramdisk.cpio
+lzma -9 ramdisk.cpio
 
 # Make boot.img
-./mkbootimg --kernel zImage --ramdisk ramdisk.cpio.gz --board smdk4x12 --base 0x10000000 --pagesize 2048 --ramdiskaddr 0x11000000 -o $KERNEL_PATH/boot.img.pre
+./mkbootimg --kernel zImage --ramdisk ramdisk.cpio.lzma --board smdk4x12 --base 0x10000000 --pagesize 2048 --ramdiskaddr 0x11000000 -o $KERNEL_PATH/boot.img.pre
 
 ./mkshbootimg.py $KERNEL_PATH/boot.img $KERNEL_PATH/boot.img.pre $KERNEL_PATH/payload.tar
 
