@@ -37,16 +37,14 @@ export ARCH=arm
 
 export USE_SEC_FIPS_MODE=true
 
-if [ "$1" = "skip" ] ; then
-	echo "Skipping Compilation"
-else
-	if [ "$1" = "clean" ]; then
-	echo "Cleaning latest build"
-	make -j`grep 'processor' /proc/cpuinfo | wc -l` mrproper
-	fi
-	# Cleaning old kernel and modules
-	find -name '*.ko' -exec rm -rf {} \;
-	rm -rf $KERNEL_PATH/arch/arm/boot/zImage
+if [ "$1" = "clean" ]; then
+echo "Cleaning latest build"
+make -j`grep 'processor' /proc/cpuinfo | wc -l` mrproper
+fi
+
+# Cleaning old kernel and modules
+find -name '*.ko' -exec rm -rf {} \;
+rm -rf $KERNEL_PATH/arch/arm/boot/zImage
 
 # Making our .config
 make $defconfig
@@ -146,7 +144,6 @@ CONFIG_TDMB_MTV318=y
 # CONFIG_TDMB_SIMUL is not set
 # CONFIG_TDMB_ANT_DET is not set
 " >> .config
-fi
 
 make -j`grep 'processor' /proc/cpuinfo | wc -l` || exit -1
 # Copying and stripping kernel modules
