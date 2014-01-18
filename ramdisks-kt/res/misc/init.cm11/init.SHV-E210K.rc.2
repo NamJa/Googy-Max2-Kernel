@@ -1,5 +1,5 @@
 import init.target.rc
-import init.SHV-E210S.usb.rc
+import init.SHV-E210K.usb.rc
 import init.bt.rc
 
 on init
@@ -37,7 +37,7 @@ on init
 on fs
     mkdir /preload
     exec /sbin/mount_system.sh
-    mount_all /fstab.SHV-E210S
+    mount_all /fstab.SHV-E210K
     exec /sbin/mount.sh
 
     setprop ro.crypto.fuse_sdcard true
@@ -392,8 +392,8 @@ on post-fs-data
 on boot
     mount debugfs /sys/kernel/debug /sys/kernel/debug
 
-    setprop ro.build.product SHV-E210S
-    setprop ro.product.device SHV-E210S
+    setprop ro.build.product SHV-E210K
+    setprop ro.product.device SHV-E210K
     setprop wifi.interface wlan0
 
 # fake some battery state
