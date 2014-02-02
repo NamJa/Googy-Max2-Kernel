@@ -70,7 +70,6 @@ modules.builtin
 *.lzo
 *.patch
 *.gcno
-*.sh
 
 #
 # Top-level generic files
