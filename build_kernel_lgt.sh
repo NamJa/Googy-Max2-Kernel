@@ -1,6 +1,6 @@
 #!/bin/bash
 
-displayversion=LGT_Googy-Max2-2.1.3
+displayversion=LGT_Googy-Max2-2.1.4
 version=$displayversion-$(date +%Y%m%d)
 
 if [ -e boot.img ]; then
