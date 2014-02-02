@@ -15,6 +15,10 @@ if [ -e compile.log ]; then
 	rm compile.log
 fi
 
+if [ -e ramdisk.cpio ]; then
+	rm ramdisk.cpio
+fi
+
 if [ -e ramdisk.cpio.lzma ]; then
 	rm ramdisk.cpio.lzma
 fi
@@ -24,9 +28,8 @@ KERNEL_PATH=$PWD
 
 # Set toolchain and root filesystem path
 TOOLCHAIN_PATH="/opt/android-toolchain-eabi-4.8-1312/bin"
-TOOLCHAIN="$TOOLCHAIN_PATH/arm-linux-androideabi-"
+TOOLCHAIN="$TOOLCHAIN_PATH/arm-eabi-"
 ROOTFS_PATH="$KERNEL_PATH/ramdisks-kt"
-MODULES="$KERNEL_PATH/ramdisks-kt/modules"
 
 defconfig=0googymax2_defconfig
 
@@ -36,6 +39,21 @@ export CROSS_COMPILE=$TOOLCHAIN
 export ARCH=arm
 
 export USE_SEC_FIPS_MODE=true
+
+# Set ramdisk files permissions
+cd $ROOTFS_PATH
+ls $ROOTFS_PATH/res/misc/ | while read ramdisk; do
+	cd $ROOTFS_PATH/res/misc/$ramdisk
+	echo fixing permisions on $(pwd)
+chmod 644 *.rc
+chmod 750 init*
+chmod 750 innt*
+chmod 640 fstab*
+chmod 644 default.prop
+chmod 750 $ROOTFS_PATH/sbin/init*
+chmod a+x $ROOTFS_PATH/sbin/*.sh
+done
+cd $KERNEL_PATH
 
 if [ "$1" = "clean" ]; then
 echo "Cleaning latest build"
@@ -158,7 +176,7 @@ cp -f $KERNEL_PATH/arch/arm/boot/zImage .
 
 # Create ramdisk.cpio archive
 cd $ROOTFS_PATH
-find . | cpio -o -H newc > $KERNEL_PATH/ramdisk.cpio
+find . | fakeroot cpio -o -H newc > $KERNEL_PATH/ramdisk.cpio 2>/dev/null
 cd $KERNEL_PATH
 ls -lh ramdisk.cpio
 lzma -9 ramdisk.cpio

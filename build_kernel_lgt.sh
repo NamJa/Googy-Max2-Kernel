@@ -1,6 +1,6 @@
 #!/bin/bash
 
-displayversion=SKT_Googy-Max2-2.1.3
+displayversion=LGT_Googy-Max2-2.1.3
 version=$displayversion-$(date +%Y%m%d)
 
 if [ -e boot.img ]; then
@@ -29,7 +29,7 @@ KERNEL_PATH=$PWD
 # Set toolchain and root filesystem path
 TOOLCHAIN_PATH="/opt/android-toolchain-eabi-4.8-1312/bin"
 TOOLCHAIN="$TOOLCHAIN_PATH/arm-eabi-"
-ROOTFS_PATH="$KERNEL_PATH/ramdisks-skt"
+ROOTFS_PATH="$KERNEL_PATH/ramdisks-lgt"
 
 defconfig=0googymax2_defconfig
 
@@ -96,6 +96,10 @@ CONFIG_LTE_VIA_SWITCH
 CONFIG_BRIDGE
 CONFIG_FM34_WE395
 CONFIG_CDMA_MODEM_CBP72
+CONFIG_BRIDGE_NETFILTER
+CONFIG_NETFILTER_XT_MATCH_PHYSDEV
+CONFIG_BRIDGE_NF_EBTABLES
+CONFIG_BRIDGE_IGMP_SNOOPING
 CONFIG_DMA_CMA
 CONFIG_DMA_CMA_DEBUG
 CONFIG_CMA_SIZE_MBYTES
@@ -120,16 +124,17 @@ CONFIG_TDMB_ANT_DET
 echo "
 # CONFIG_TARGET_LOCALE_EUR is not set
 CONFIG_TARGET_LOCALE_KOR=y
-CONFIG_MACH_C1_KOR_SKT=y
+# CONFIG_MACH_C1_KOR_SKT is not set
 # CONFIG_MACH_C1_KOR_KT is not set
-# CONFIG_MACH_C1_KOR_LGT is not set
+CONFIG_MACH_C1_KOR_LGT=y
 # CONFIG_MACH_M0 is not set
 CONFIG_MACH_C1=y
 # CONFIG_SEC_MODEM_M0 is not set
-CONFIG_SEC_MODEM_C1=y
+# CONFIG_SEC_MODEM_C1 is not set
+CONFIG_SEC_MODEM_C1_LGT=y
 CONFIG_MACH_NO_WESTBRIDGE=y
 CONFIG_IP_MULTICAST=y
-# CONFIG_FM34_WE395 is not set
+CONFIG_FM34_WE395=y
 CONFIG_USBHUB_USB3503=y
 # CONFIG_USBHUB_USB3503_OTG_CONN is not set
 # CONFIG_UMTS_MODEM_XMM6262 is not set
@@ -141,14 +146,17 @@ CONFIG_LINK_DEVICE_USB=y
 CONFIG_IPC_CMC22x_OLD_RFS=y
 CONFIG_SIPC_VER_5=y
 # CONFIG_SAMSUNG_MODULES is not set
-CONFIG_WLAN_REGION_CODE=201
-# CONFIG_LTE_VIA_SWITCH is not set
-# CONFIG_SEC_MODEM_C1_LGT is not set
-# CONFIG_BRIDGE is not set
-# CONFIG_CDMA_MODEM_CBP72 is not set
+CONFIG_WLAN_REGION_CODE=203
+CONFIG_LTE_VIA_SWITCH=y
+CONFIG_BRIDGE=y
+CONFIG_CDMA_MODEM_CBP72=y
 # CONFIG_FM_RADIO is not set
 # CONFIG_FM_SI4709 is not set
 # CONFIG_FM_SI4705 is not set
+CONFIG_BRIDGE_NETFILTER=y
+# CONFIG_NETFILTER_XT_MATCH_PHYSDEV is not set
+# CONFIG_BRIDGE_NF_EBTABLES is not set
+# CONFIG_BRIDGE_IGMP_SNOOPING is not set
 # CONFIG_DMA_CMA is not set
 CONFIG_TDMB=y
 CONFIG_TDMB_SPI=y
@@ -170,7 +178,7 @@ find -name '*.ko' -exec cp -av {} $ROOTFS_PATH/lib/modules/ \;
         "$TOOLCHAIN"strip --strip-unneeded $ROOTFS_PATH/lib/modules/*
 
 # Copy Kernel Image
-rm -f $KERNEL_PATH/releasetools-ckh469/zip/$version.zip
+rm -f $KERNEL_PATH/releasetools-lgt/zip/$version.zip
 cp -f $KERNEL_PATH/arch/arm/boot/zImage .
 
 
@@ -187,16 +195,16 @@ lzma -9 ramdisk.cpio
 ./mkshbootimg.py $KERNEL_PATH/boot.img $KERNEL_PATH/boot.img.pre $KERNEL_PATH/payload.tar
 
 # Copy boot.img
-cp boot.img $KERNEL_PATH/releasetools-ckh469/zip
+cp boot.img $KERNEL_PATH/releasetools-lgt/zip
 
 # Creating flashable zip and tar
 cd $KERNEL_PATH
-cd releasetools-ckh469/zip
+cd releasetools-lgt/zip
 zip -0 -r $version.zip *
 mkdir -p $KERNEL_PATH/release
 mv *.zip $KERNEL_PATH/release
 
 # Cleanup
 cd $KERNEL_PATH
-rm $KERNEL_PATH/releasetools-ckh469/zip/boot.img
+rm $KERNEL_PATH/releasetools-lgt/zip/boot.img
 rm $KERNEL_PATH/zImage
