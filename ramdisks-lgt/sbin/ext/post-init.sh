@@ -59,9 +59,9 @@ echo "${ext_read_ahead_kb}" > /sys/block/mmcblk1/bdi/read_ahead_kb
 ##### GGY TouchWake end #####
 
 #mdnie sharpness tweak
-#if [ "$mdniemod" == "on" ];then
-#. /sbin/ext/mdnie-sharpness-tweak.sh
-#fi
+if [ "$mdniemod" == "on" ];then
+. /sbin/ext/mdnie-sharpness-tweak.sh
+fi
 
 if [ "$logger" == "on" ];then
 insmod /lib/modules/logger.ko
