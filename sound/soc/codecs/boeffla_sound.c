@@ -1,9 +1,17 @@
 /*
+<<<<<<< HEAD
  * Author: andip71, 26.08.2013
  * 
  * Modifications: Yank555.lu 20.08.2013
  *
  * Version 1.6.4
+=======
+ * Author: andip71, 14.01.2014
+ * 
+ * Modifications: Yank555.lu 20.08.2013
+ *
+ * Version 1.6.5
+>>>>>>> e3ef60d... boeffla sound 1.6.5
  *
  * credits: Supercurio for ideas and partially code from his Voodoo
  * 	    	sound implementation,
@@ -22,6 +30,17 @@
  *
  */
 
+<<<<<<< HEAD
+=======
+/*
+ * Change log:
+ *
+ * 1.6.5 (14.01.2014)
+ *   - Allow speaker level minimum of 20
+ *
+ */
+
+>>>>>>> e3ef60d... boeffla sound 1.6.5
 #include <sound/soc.h>
 #include <sound/core.h>
 #include <sound/jack.h>
