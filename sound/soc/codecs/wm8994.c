@@ -124,10 +124,7 @@ static void wm8958_micd_set_rate(struct snd_soc_codec *codec)
 			    WM8958_MICD_RATE_MASK, val);
 }
 
-#ifndef CONFIG_SND_WOLFSON_SOUND_CONTROL
-static
-#endif
-int wm8994_readable(struct snd_soc_codec *codec, unsigned int reg)
+static int wm8994_readable(struct snd_soc_codec *codec, unsigned int reg)
 {
 	struct wm8994_priv *wm8994 = snd_soc_codec_get_drvdata(codec);
 	struct wm8994 *control = codec->control_data;
@@ -168,10 +165,7 @@ int wm8994_readable(struct snd_soc_codec *codec, unsigned int reg)
 	return wm8994_access_masks[reg].readable != 0;
 }
 
-#ifndef CONFIG_SND_WOLFSON_SOUND_CONTROL
-static
-#endif
-int wm8994_volatile(struct snd_soc_codec *codec, unsigned int reg)
+static int wm8994_volatile(struct snd_soc_codec *codec, unsigned int reg)
 {
 	if (reg >= WM8994_CACHE_SIZE)
 		return 1;
@@ -193,17 +187,6 @@ int wm8994_volatile(struct snd_soc_codec *codec, unsigned int reg)
 	}
 }
 
-#ifdef CONFIG_SND_VOODOO
-#include "wm8994_voodoo.h"
-#endif
-
-#ifdef CONFIG_SND_BOEFFLA
-#include "boeffla_sound.h"
-#endif
-
-#ifdef CONFIG_SND_WOLFSON_SOUND_CONTROL
-#include "sound_control.h"
-#endif
 
 static int wm8994_write(struct snd_soc_codec *codec, unsigned int reg,
 	unsigned int value)
@@ -211,18 +194,6 @@ static int wm8994_write(struct snd_soc_codec *codec, unsigned int reg,
 	int ret;
 
 	BUG_ON(reg > WM8994_MAX_REGISTER);
-
-#ifdef CONFIG_SND_VOODOO
-	value = voodoo_hook_wm8994_write(codec, reg, value);
-#endif
-
-#ifdef CONFIG_SND_BOEFFLA
-	value = Boeffla_sound_hook_wm8994_write(reg, value);
-#endif
-
-#ifdef CONFIG_SND_WOLFSON_SOUND_CONTROL
-	value = sound_control_hook_wm8994_write(reg, value);
-#endif
 
 	if (!wm8994_volatile(codec, reg)) {
 		ret = snd_soc_cache_write(codec, reg, value);
@@ -234,10 +205,7 @@ static int wm8994_write(struct snd_soc_codec *codec, unsigned int reg,
 	return wm8994_reg_write(codec->control_data, reg, value);
 }
 
-#ifndef CONFIG_SND_WOLFSON_SOUND_CONTROL
-static
-#endif
-unsigned int wm8994_read(struct snd_soc_codec *codec,
+static unsigned int wm8994_read(struct snd_soc_codec *codec,
 				unsigned int reg)
 {
 	unsigned int val;
@@ -4269,17 +4237,6 @@ static int wm8994_codec_probe(struct snd_soc_codec *codec)
 					ARRAY_SIZE(wm8958_intercon));
 		break;
 	}
-#ifdef CONFIG_SND_VOODOO
-	voodoo_hook_wm8994_pcm_probe(codec);
-#endif
-
-#ifdef CONFIG_SND_BOEFFLA
-	Boeffla_sound_hook_wm8994_pcm_probe(codec);
-#endif
-
-#ifdef CONFIG_SND_WOLFSON_SOUND_CONTROL
-	sound_control_hook_wm8994_pcm_probe(codec);
-#endif
 
 	return 0;
 
